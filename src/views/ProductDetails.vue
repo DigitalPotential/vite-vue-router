@@ -1,20 +1,31 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const product = ref(null)
 
-const products = [
-  { id: 1, name: 'Laptop', price: 9999, description: 'Kraftfull laptop för alla behov' },
-  { id: 2, name: 'Phone', price: 5999, description: 'Smart telefon med senaste tekniken' },
-  { id: 3, name: 'Tablet', price: 4999, description: 'Perfekt för både arbete och nöje' }
-]
+// Simulera en asynkron datahämtning
+const loadProduct = async (id) => {
+  const products = [
+    { id: 1, name: 'Laptop', price: 9999, description: 'Kraftfull laptop för alla behov' },
+    { id: 2, name: 'Phone', price: 5999, description: 'Smart telefon med senaste tekniken' },
+    { id: 3, name: 'Tablet', price: 4999, description: 'Perfekt för både arbete och nöje' }
+  ]
 
-onMounted(() => {
-  const productId = parseInt(route.params.id)
-  product.value = products.find(p => p.id === productId)
-})
+  // Simulera nätverksfördröjning (1 sekund)
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  
+  // Hitta produkten och kasta error om den inte finns
+  const found = products.find(p => p.id === id)
+  if (!found) {
+    throw new Error('Produkten hittades inte')
+  }
+  return found
+}
+
+// Top-level await gör komponenten async, vilket aktiverar Suspense
+product.value = await loadProduct(parseInt(route.params.id))
 </script>
 
 <template>
@@ -23,9 +34,6 @@ onMounted(() => {
     <p class="price">Pris: {{ product.price }} kr</p>
     <p class="description">{{ product.description }}</p>
     <RouterLink to="/products" class="back-link">Tillbaka till produkter</RouterLink>
-  </div>
-  <div v-else>
-    <p>Produkten hittades inte</p>
   </div>
 </template>
 

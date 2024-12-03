@@ -4,6 +4,7 @@ import auth from '../../services/auth'
 
 const router = useRouter()
 
+// Hantera utloggning
 const handleLogout = () => {
   auth.logout()
   router.push('/login')
@@ -12,15 +13,20 @@ const handleLogout = () => {
 
 <template>
   <div class="admin">
+    <!-- Admin header med logout-knapp -->
     <div class="admin-header">
       <h1>Admin Panel</h1>
       <button @click="handleLogout" class="logout-btn">Logga ut</button>
     </div>
+    
+    <!-- Navigation för admin-undersidor -->
     <nav class="admin-nav">
       <RouterLink to="/admin/dashboard">Dashboard</RouterLink>
       <RouterLink to="/admin/users">Användare</RouterLink>
       <RouterLink to="/admin/settings">Inställningar</RouterLink>
     </nav>
+    
+    <!-- Visa aktiv admin-undersida -->
     <div class="admin-content">
       <RouterView />
     </div>

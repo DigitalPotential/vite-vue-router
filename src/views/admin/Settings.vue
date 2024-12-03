@@ -1,3 +1,17 @@
+<script setup>
+import { ref } from 'vue'
+
+const settings = ref({
+  siteName: 'Min Admin Panel',
+  notificationEmail: 'admin@example.com',
+  darkMode: false
+})
+
+const saveSettings = () => {
+  alert('Inställningar sparade!')
+}
+</script>
+
 <template>
   <div class="settings">
     <h2>Inställningar</h2>
@@ -18,20 +32,6 @@
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-
-const settings = ref({
-  siteName: 'Min Admin Panel',
-  notificationEmail: 'admin@example.com',
-  darkMode: false
-})
-
-const saveSettings = () => {
-  alert('Inställningar sparade!')
-}
-</script>
 
 <style scoped>
 .form-group {

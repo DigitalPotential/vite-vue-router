@@ -1,3 +1,11 @@
+<script setup>
+const users = [
+  { id: 1, name: 'Anna Andersson', email: 'anna@example.com', role: 'Admin' },
+  { id: 2, name: 'Erik Eriksson', email: 'erik@example.com', role: 'User' },
+  { id: 3, name: 'Maria Nilsson', email: 'maria@example.com', role: 'Editor' },
+]
+</script>
+
 <template>
   <div class="users">
     <h2>Användare</h2>
@@ -21,14 +29,6 @@
     </table>
   </div>
 </template>
-
-<script setup>
-const users = [
-  { id: 1, name: 'Anna Andersson', email: 'anna@example.com', role: 'Admin' },
-  { id: 2, name: 'Erik Eriksson', email: 'erik@example.com', role: 'User' },
-  { id: 3, name: 'Maria Nilsson', email: 'maria@example.com', role: 'Editor' },
-]
-</script>
 
 <style scoped>
 table {
