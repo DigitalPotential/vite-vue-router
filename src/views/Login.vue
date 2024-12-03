@@ -1,9 +1,45 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import auth from '../services/auth'
+
+const router = useRouter()
+
+// Form state variabler
+const username = ref('')
+const password = ref('')
+const error = ref('')
+const loading = ref(false)
+
+// Hantera inloggningsförsök
+const handleLogin = async () => {
+  loading.value = true  // Visa loading state
+  error.value = ''      // Rensa tidigare fel
+  
+  try {
+    // Försök logga in med användarnamn och lösenord
+    await auth.login(username.value, password.value)
+    // Vid lyckad inloggning, navigera till admin
+    router.push('/admin')
+  } catch (err) {
+    // Vid fel, visa felmeddelande
+    error.value = err.message
+  } finally {
+    // Återställ loading state oavsett resultat
+    loading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login">
     <h2>Logga in</h2>
+    <!-- Visa eventuella felmeddelanden -->
     <div v-if="error" class="error">
       {{ error }}
     </div>
+
+    <!-- Inloggningsformulär -->
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label>Användarnamn</label>
@@ -13,38 +49,13 @@
         <label>Lösenord</label>
         <input type="password" v-model="password" required>
       </div>
+      <!-- Login-knapp med loading state -->
       <button type="submit" :disabled="loading">
         {{ loading ? 'Loggar in...' : 'Logga in' }}
       </button>
     </form>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import auth from '../services/auth'
-
-const router = useRouter()
-const username = ref('')
-const password = ref('')
-const error = ref('')
-const loading = ref(false)
-
-const handleLogin = async () => {
-  loading.value = true;
-  error.value = '';
-  
-  try {
-    await auth.login(username.value, password.value);
-    router.push('/admin');
-  } catch (err) {
-    error.value = err.message;
-  } finally {
-    loading.value = false;
-  }
-};
-</script>
 
 <style scoped>
 .login {

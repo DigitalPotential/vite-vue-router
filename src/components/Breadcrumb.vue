@@ -4,18 +4,16 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-// Beräkna breadcrumbs baserat på matchade routes
+// Beräkna breadcrumbs baserat på nuvarande route
 const breadcrumbs = computed(() => {
   // Mappa varje matchad route till ett breadcrumb-objekt
   return route.matched.map(r => {
     return {
-      name: r.meta.breadcrumb, // Använd breadcrumb-text från route meta
+      name: r.meta.breadcrumb,
       path: r.path,
-      // Säkerställ att path börjar med '/'
       link: r.path.startsWith('/') ? r.path : `/${r.path}`
     }
-  // Filtrera bort routes som saknar breadcrumb i meta
-  }).filter(b => b.name)
+  }).filter(b => b.name) // Filtrera bort routes utan breadcrumb
 })
 </script>
 

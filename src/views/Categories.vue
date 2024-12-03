@@ -7,15 +7,18 @@ const route = useRoute()
 
 <template>
   <div class="categories">
+    <!-- Visa kategorilistan endast när ingen specifik kategori är vald -->
     <div v-if="!route.params.categoryId">
       <h1>Kategorier</h1>
+      <!-- Grid med kategorikort -->
       <div class="category-grid">
+        <!-- Loopa genom alla kategorier och skapa länkar -->
         <RouterLink 
           v-for="category in categories" 
           :key="category.id"
           :to="{
             name: 'category',
-            params: { categoryId: category.slug }
+            params: { categoryId: category.slug }  // Använd slug för URL
           }"
           class="category-card"
         >
@@ -24,6 +27,7 @@ const route = useRoute()
       </div>
     </div>
 
+    <!-- RouterView för att visa vald kategori och dess produkter -->
     <RouterView />
   </div>
 </template>

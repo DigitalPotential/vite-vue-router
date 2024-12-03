@@ -1,4 +1,5 @@
 <script setup>
+// Lista med produkter (i en riktig app skulle detta komma från en API eller store)
 const products = [
   { id: 1, name: 'Laptop', price: 9999 },
   { id: 2, name: 'Phone', price: 5999 },
@@ -9,10 +10,15 @@ const products = [
 <template>
   <div class="products">
     <h1>Våra Produkter</h1>
+    <!-- Grid med produktkort -->
     <div class="product-grid">
-      <div v-for="product in products" :key="product.id" class="product-card">
+      <!-- Loopa genom alla produkter -->
+      <div v-for="product in products" 
+           :key="product.id" 
+           class="product-card">
         <h2>{{ product.name }}</h2>
         <p>Pris: {{ product.price }} kr</p>
+        <!-- Länk till produktdetaljer med dynamisk route parameter -->
         <RouterLink :to="`/product/${product.id}`">Visa detaljer</RouterLink>
       </div>
     </div>

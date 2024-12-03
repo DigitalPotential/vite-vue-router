@@ -1,4 +1,5 @@
 <script setup>
+// Exempel på användardata (i en riktig app skulle detta komma från en API)
 const users = [
   { id: 1, name: 'Anna Andersson', email: 'anna@example.com', role: 'Admin' },
   { id: 2, name: 'Erik Eriksson', email: 'erik@example.com', role: 'User' },
@@ -9,7 +10,9 @@ const users = [
 <template>
   <div class="users">
     <h2>Användare</h2>
+    <!-- Tabell för att visa användarlista -->
     <table>
+      <!-- Tabellhuvud med kolumnrubriker -->
       <thead>
         <tr>
           <th>ID</th>
@@ -18,6 +21,7 @@ const users = [
           <th>Roll</th>
         </tr>
       </thead>
+      <!-- Tabellinnehåll med användardata -->
       <tbody>
         <tr v-for="user in users" :key="user.id">
           <td>{{ user.id }}</td>

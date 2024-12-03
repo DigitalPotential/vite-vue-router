@@ -1,12 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 
+// Grundinställningar för admin-panelen med default-värden
 const settings = ref({
   siteName: 'Min Admin Panel',
   notificationEmail: 'admin@example.com',
   darkMode: false
 })
 
+// Simulera sparande av inställningar (i en riktig app skulle detta vara ett API-anrop)
 const saveSettings = () => {
   alert('Inställningar sparade!')
 }
@@ -15,19 +17,24 @@ const saveSettings = () => {
 <template>
   <div class="settings">
     <h2>Inställningar</h2>
+    <!-- Formulär för admin-inställningar -->
     <form @submit.prevent="saveSettings">
+      <!-- Webbplatsnamn -->
       <div class="form-group">
         <label>Webbplatsnamn</label>
         <input type="text" v-model="settings.siteName">
       </div>
+      <!-- Email för notifieringar -->
       <div class="form-group">
         <label>Email för notifieringar</label>
         <input type="email" v-model="settings.notificationEmail">
       </div>
+      <!-- Toggle för mörkt läge -->
       <div class="form-group">
         <label>Mörkt läge</label>
         <input type="checkbox" v-model="settings.darkMode">
       </div>
+      <!-- Submit-knapp -->
       <button type="submit">Spara inställningar</button>
     </form>
   </div>

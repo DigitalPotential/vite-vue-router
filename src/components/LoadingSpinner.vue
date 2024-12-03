@@ -1,5 +1,5 @@
 <template>
-  <!-- Enkel loading spinner med text -->
+  <!-- Enkel loading spinner som visas under laddning -->
   <div class="loading-container">
     <div class="loading-spinner"></div>
     <p>Laddar...</p>

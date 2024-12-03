@@ -7,15 +7,19 @@ import { products } from '../data/products'
 const route = useRoute()
 const router = useRouter()
 
+// Definiera sorteringsalternativ
 const sortOptions = [
   { value: 'price', label: 'Pris' },
   { value: 'name', label: 'Namn' },
   { value: 'newest', label: 'Senaste' }
 ]
 
+// Håll koll på vald sortering, använd URL query eller default till 'price'
 const selectedSort = ref(route.query.sort || 'price')
 
+// Hantera ändring av sortering
 const handleSortChange = (event) => {
+  // Uppdatera URL med ny sortering men behåll andra query params
   router.push({
     query: { 
       ...route.query,
@@ -24,15 +28,19 @@ const handleSortChange = (event) => {
   })
 }
 
+// Hantera toggle av filter (new/sale)
 const toggleFilter = (filter) => {
+  // Skapa en Set från nuvarande filter i URL
   const currentFilters = new Set(route.query.filter?.split(',') || [])
   
+  // Toggla filtret (lägg till eller ta bort)
   if (currentFilters.has(filter)) {
     currentFilters.delete(filter)
   } else {
     currentFilters.add(filter)
   }
 
+  // Uppdatera URL med nya filter
   router.push({
     query: { 
       ...route.query,
@@ -41,9 +49,12 @@ const toggleFilter = (filter) => {
   })
 }
 
+// Computed property som filtrerar och sorterar produkter
 const filteredProducts = computed(() => {
+  // Hämta produkter för vald kategori
   let result = products[route.params.categoryId] || []
   
+  // Applicera filter (new/sale)
   const filters = route.query.filter?.split(',') || []
   if (filters.length) {
     result = result.filter(product => {
@@ -55,6 +66,7 @@ const filteredProducts = computed(() => {
     })
   }
 
+  // Applicera sortering
   const sort = route.query.sort
   if (sort) {
     result = [...result].sort((a, b) => {

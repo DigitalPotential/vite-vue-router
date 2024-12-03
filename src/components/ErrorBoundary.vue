@@ -11,13 +11,12 @@ onErrorCaptured((err) => {
   return false // Stoppa error från att propagera vidare
 })
 
-// Funktion för att försöka igen
+// Funktioner för att hantera fel
 const retry = () => {
   error.value = null
   window.location.reload()
 }
 
-// Funktion för att gå tillbaka till startsidan
 const goHome = () => {
   error.value = null
   router.push('/')
