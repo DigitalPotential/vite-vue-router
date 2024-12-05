@@ -11,7 +11,7 @@ const auth = {
         this.user = {
           id: 1,
           username: username,
-          role: "admin",
+          role: "admin"
         };
         // Spara auth-status i localStorage
         localStorage.setItem("isAuthenticated", "true");
@@ -22,7 +22,7 @@ const auth = {
         this.user = {
           id: 2,
           username: username,
-          role: "user",
+          role: "user"
         };
         localStorage.setItem("isAuthenticated", "true");
         localStorage.setItem("user", JSON.stringify(this.user));
@@ -40,6 +40,7 @@ const auth = {
     localStorage.removeItem("isAuthenticated");
     localStorage.removeItem("user");
   },
+
   // Kontrollera om användaren är inloggad
   checkAuth() {
     // Om vi redan har en user, returnera true
@@ -49,13 +50,13 @@ const auth = {
     // Annars kolla localStorage
     const isAuth = localStorage.getItem("isAuthenticated") === "true";
     const user = JSON.parse(localStorage.getItem("user"));
-
+    
     if (isAuth && user) {
       this.isAuthenticated = true;
       this.user = user;
       return true;
     }
-
+    
     return false;
   },
   // Hämta inloggad användare
@@ -72,11 +73,8 @@ const auth = {
   hasRole(roles) {
     const user = this.getUser();
     if (!user) return false;
-
-    // Tillåt åtkomst om användarens roll finns i den tillåtna listan
-    // eller om 'guest' är tillåten
-    return roles.includes(user.role) || roles.includes("guest");
-  },
+    return roles.includes(user.role);
+  }
 };
 
 export default auth;

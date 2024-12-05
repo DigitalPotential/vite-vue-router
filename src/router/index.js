@@ -17,15 +17,14 @@ import CategoryProducts from "../views/CategoryProducts.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // Publika routes som alla kan nå
+    // Publika routes - behöver ingen roles definition
     {
       path: "/",
       name: "home",
       component: HomeView,
       meta: {
         title: 'Hem',
-        breadcrumb: 'Hem',
-        roles: ['guest', 'user', 'admin'] // Alla roller har tillgång
+        breadcrumb: 'Hem'
       }
     },
     {
@@ -34,8 +33,7 @@ const router = createRouter({
       component: About,
       meta: {
         title: 'Om oss',
-        breadcrumb: 'Om oss',
-        roles: ['guest', 'user', 'admin']
+        breadcrumb: 'Om oss'
       }
     },
     {
@@ -44,8 +42,7 @@ const router = createRouter({
       component: Contact,
       meta: {
         title: 'Kontakt',
-        breadcrumb: 'Kontakt',
-        roles: ['guest', 'user', 'admin']
+        breadcrumb: 'Kontakt'
       }
     },
     // Produktrelaterade routes
@@ -55,8 +52,7 @@ const router = createRouter({
       component: ProductList,
       meta: {
         title: 'Produkter',
-        breadcrumb: 'Produkter',
-        roles: ['guest', 'user', 'admin']
+        breadcrumb: 'Produkter'
       }
     },
     {
@@ -65,11 +61,10 @@ const router = createRouter({
       component: ProductDetails,
       meta: {
         title: 'Produktdetaljer',
-        breadcrumb: 'Detaljer',
-        roles: ['guest', 'user', 'admin']
+        breadcrumb: 'Detaljer'
       }
     },
-    // Auth routes
+    // Login route - speciell hantering
     {
       path: "/login",
       name: "login",
@@ -79,24 +74,22 @@ const router = createRouter({
         breadcrumb: 'Logga in'
       }
     },
-    // Skyddad admin-sektion med nästlade routes
+    // Skyddade routes - använd requiresAuth och roles
     {
       path: "/admin",
-      name: "admin",
       component: Admin,
       meta: { 
         requiresAuth: true,
         title: 'Admin',
         breadcrumb: 'Admin',
-        roles: ['admin']
+        roles: ['admin'] // Endast för skyddade routes
       },
       children: [
-        // Lägg till denna redirect först i children-arrayen
         {
-          path: "", // tom path
-          redirect: { name: 'admin-dashboard' } // redirect till dashboard
+          path: "", // Tom path för default route
+          name: "admin", // Flytta name hit istället
+          redirect: { name: 'admin-dashboard' }
         },
-        // Admin undersidor
         {
           path: "dashboard",
           name: "admin-dashboard",
@@ -159,36 +152,35 @@ const router = createRouter({
   ],
 });
 
-// Global navigation guard
+// Förenklad navigation guard
 router.beforeEach((to, from, next) => {
-  // Uppdatera sidtitel
   document.title = to.meta.title ? `${to.meta.title} - Min Site` : 'Min Site';
 
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = auth.checkAuth();
   
-  // Kontrollera användarroller
+  // Kontrollera roller endast för skyddade routes
   const hasRequiredRole = to.matched.every(record => {
-    const roles = record.meta.roles || ['guest'];
-    return auth.hasRole(roles);
+    if (!record.meta.roles) return true; // Om inga roles är definierade, tillåt access
+    return auth.hasRole(record.meta.roles);
   });
 
+  if (to.name === 'login' && isAuthenticated) {
+    return next({ name: 'admin-dashboard' });
+  }
+
   if (requiresAuth && !isAuthenticated) {
-    // Om användaren inte är inloggad, skicka till login
-    next({ 
+    return next({ 
       name: 'login',
       query: { redirect: to.fullPath }
     });
-  } else if (to.name === 'login' && isAuthenticated) {
-    // Om användaren redan är inloggad och försöker nå login-sidan
-    next({ name: 'admin' });
-  } else if (!hasRequiredRole) {
-    // Om användaren saknar rätt roll
-    next({ name: 'home' });
-  } else {
-    // Om allt är ok
-    next();
   }
+
+  if (requiresAuth && !hasRequiredRole) {
+    return next({ name: 'home' });
+  }
+
+  next();
 });
 
 export default router;

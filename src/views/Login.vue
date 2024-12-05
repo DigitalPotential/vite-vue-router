@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import auth from '../services/auth'
 
 const router = useRouter()
+const route = useRoute()
 
 // Form state variabler
 const username = ref('')
@@ -19,8 +20,9 @@ const handleLogin = async () => {
   try {
     // Försök logga in med användarnamn och lösenord
     await auth.login(username.value, password.value)
-    // Vid lyckad inloggning, navigera till admin
-    router.push('/admin')
+    // Kontrollera om det finns en redirect URL
+    const redirectPath = route.query.redirect || '/admin/dashboard'
+    router.push(redirectPath)
   } catch (err) {
     // Vid fel, visa felmeddelande
     error.value = err.message
